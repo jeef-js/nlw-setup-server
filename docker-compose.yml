@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  pg_database:
+    container_name: database_nlw
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+    volumes:
+      - ./data:/var/lib/postgresql/data
+
+  app:
+    container_name: server_nlw
+    build: .
+    command: sh -c "yarn dev"
+    ports:
+      - "3333:3333"
+      - "5555:5555"
+    volumes:
+      - .:/usr/app
+    depends_on:
+      - pg_database
